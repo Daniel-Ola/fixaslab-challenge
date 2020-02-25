@@ -34,7 +34,7 @@ session_start() ;
                               <label for="">Password</label>
                               <input type="password" class="form-control" name="password" id="" placeholder="Enter your password">
                             </div>
-                            <button type="submit" class="btn btn-primary" name="command" value="register">Register Me</button>
+                            <button type="submit" class="btn btn-primary" name="command" value="login">Login</button>
                             <p class="text-center text-info mt-4">Already have an account? <a href="register.php">Sign up here</a></p>
                         </form>
                     </div>

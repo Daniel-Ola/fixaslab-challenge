@@ -11,10 +11,10 @@ $connect = dbconnect() ;
 
 class DataWrite
 {
-	function createUser($con , $email , $password)
+	function createUser($con , $email , $password , $fullname)
 	{
 		$token = passwordHash($email) ;
-		$query = $con->query("INSERT INTO users (email , password , token) VALUES ('$email' , '$password' , '$token') ") ;
+		$query = $con->query("INSERT INTO users (fullname , email , password , token) VALUES ('$fullname' , '$email' , '$password' , '$token') ") ;
 		if($query)
 		{
 			return mysqli_insert_id($con) ;
@@ -290,6 +290,16 @@ class DataWrite
 
 class DataRead
 {
+	function login($con , $email)
+	{
+		$query = $con->query("SELECT * FROM users WHERE email = '$email' LIMIT 1 ") ;
+		if($query){
+			return fetcher($query) ;
+		}else{
+			return false ;
+		}
+	}
+
 	function get_otp($connect , $id)
 	{
 		$query = mysqli_query($connect , "SELECT * FROM members WHERE id= '$id' ") ;

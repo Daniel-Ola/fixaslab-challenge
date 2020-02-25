@@ -27,7 +27,7 @@ session_start() ;
                         <form action="php/actionmanager.php" method="post">
                             <div class="form-group">
                               <label for="">Fullname</label>
-                              <input type="text" class="form-control" name="name" id="" aria-describedby="helpId" placeholder="Enter your fullname">
+                              <input type="text" class="form-control" name="fullname" id="" aria-describedby="helpId" placeholder="Enter your fullname">
                               <!-- <small id="helpId" class="form-text text-muted">Help text</small> -->
                             </div>
                             <div class="form-group">
