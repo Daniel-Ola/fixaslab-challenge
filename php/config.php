@@ -2,19 +2,21 @@
 
 function Check_If_Exists($connect , $table , $column , $value)
 {
-  include_once("dbconnect.php") ;
+  // include_once("dbconnect.php") ;
   $query = mysqli_query($connect , "SELECT * FROM ".$table." WHERE ".$column." = '$value' ") ;
   if($query)
   {
     $num = numQuery($query) ;
     if($num == 0)
     {
-      return 1 ; // no user
+      return 1 ; // true no user
     }
     else
     {
-      return 0 ; // user exists
+      return 0 ; // false user exists
     }
+  }else{
+    return mysqli_error($connect) ;
   }
 }
 

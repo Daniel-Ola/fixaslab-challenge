@@ -11,23 +11,17 @@ $connect = dbconnect() ;
 
 class DataWrite
 {
-	function createUser($connect , $phone)
+	function createUser($con , $email , $password)
 	{
-		$query = mysqli_query($connect , "INSERT INTO members (username , status) VALUES ('$phone' , '2') ") ;
+		$token = passwordHash($email) ;
+		$query = $con->query("INSERT INTO users (email , password , token) VALUES ('$email' , '$password' , '$token') ") ;
 		if($query)
 		{
-			$id = mysqli_insert_id($connect) ;
-			$dataWrite = new DataWrite() ;
-			$profile = $dataWrite->saveProfile($connect , $id) ;
-			if($profile)
-			{
-				return true;
-			}
-			
+			return mysqli_insert_id($con) ;
 		}
 		else
 		{
-			return false ;
+			return mysqli_error($con) ;
 		}
 	}
 
