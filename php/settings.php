@@ -31,10 +31,10 @@ else
 			}
 		}
 
-		function getUserProfile($user_id)
+		function getUserDet($user_id)
 		{
 			$connect = dbconnect() ;
-			$query = mysqli_query($connect , "SELECT * FROM profiles WHERE user_id = '$user_id' ") ;
+			$query = $connect->query("SELECT * FROM users WHERE user_id = '$user_id' ") ;
 			if($query)
 			{
 				$fetch = fetcher($query) ; //mysqli_fetch_assoc($query) ;
