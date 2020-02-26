@@ -13,6 +13,7 @@ $userDet = $user->getUserDet($_SESSION['user_id']) ;
     <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
 </head>
     <body>
+        <input type="hidden" value="<?= $userDet['email'] ?>" id="userMail">
         <nav class="navbar navbar-expand-sm navbar-dark bg-primary">
             <a class="navbar-brand" href="#">FixasLab</a>
             <button class="navbar-toggler d-lg-none" type="button" data-toggle="collapse" data-target="#collapsibleNavId" aria-controls="collapsibleNavId"
@@ -25,8 +26,8 @@ $userDet = $user->getUserDet($_SESSION['user_id']) ;
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="dropdownId" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">FixasBank</a>
                         <div class="dropdown-menu" aria-labelledby="dropdownId">
-                            <a class="dropdown-item" href="#">Create Account</a>
-                            <a class="dropdown-item" href="#">Fund Account</a>
+                            <a class="dropdown-item" data-toggle="modal" data-target="#modelId" id="navAcctCreator" style="display: none;" href="#">Create Account</a>
+                            <a class="dropdown-item" id="fundAccout" data-toggle="modal" data-target="#fundAcctModal" href="#">Fund Account</a>
                             <a class="dropdown-item" href="#">Withdraw from Account</a>
                         </div>
                     </li>
@@ -47,11 +48,16 @@ $userDet = $user->getUserDet($_SESSION['user_id']) ;
                             <div class="card-body">
                                 <h4 class="card-title text-center">Welcome to your homepage at FixasLab</h4>
                                 <p class="card-text">Quick Links</p>
+                                <?php 
+                                    $detStr = implode('_-_' , $userDet) ;
+                                    $encodedDet = base64_encode($detStr) ;
+                                ?>
                             </div>
                             <ul class="list-group list-group-flush">
-                                <li class="list-group-item">You do not have a FixasBank Account. Create on now.</li>
-                                <li class="list-group-item"><span class="btn btn-info"> Wallet balance</span> <span class="badge badge-info float-right">0.00</span></li>
-                                <li class="list-group-item">Item 3</li>
+                                <li class="list-group-item text-center" id="preload">Loading</li>
+                                <li class="list-group-item d-none" id="hasAccount">You do not have a FixasBank Account. Create one now. <span class="btn btn-info float-right" data-toggle="modal" data-target="#modelId">Create Account</span></li>
+                                <li class="list-group-item d-none" id="hasBalance"><span class="btn btn-info"> Wallet balance</span> <span class="badge badge-info float-right" id="balance">0.00</span></li>
+                                <!-- <li class="list-group-item d-none">Item 3</li> -->
                             </ul>
                         </div>
 
@@ -59,9 +65,68 @@ $userDet = $user->getUserDet($_SESSION['user_id']) ;
                 </div>
             </div>
         </main>
+                                <!-- MODAL -->
+                                
+                                <!-- Modal -->
+                                <div class="modal fade" id="modelId" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title">Create Account with FixasBank</h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class="alert alert-info text-center d-none" id="acctcreateReturn"></div>
+                                                <form method="get" action="">
+                                                    <div class="form-group">
+                                                      <label for="">Email</label>
+                                                      <input type="email" class="form-control" name="" id="userEmail" value="<?= $userDet['email'] ?>" aria-describedby="emailHelpId" placeholder="" readonly>
+                                                    </div>
+                                                    <div class="form-group">
+                                                      <label for="">Fullname</label>
+                                                      <input type="text" class="form-control" name="" id="fullname" value="<?= $userDet['fullname'] ?>" aria-describedby="helpId" placeholder="">
+                                                    </div>
+                                                    <div class="form-group">
+                                                      <label for="">Password</label>
+                                                      <input type="password" class="form-control" name="" id="password" placeholder="">
+                                                    </div>
+                                                </form>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" style="display: none;" id="okayBtn" data-dismiss="modal">Okay</button>
+                                                <button type="button" class="btn btn-primary" id="createAcct">Create my Account</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <!-- fund account modal -->
+                                    <div id="fundAcctModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-body">
+                                                        <div class="form-group">
+                                                            <label for="">Enter Amount</label>
+                                                            <input type="number" name="fundAmount" id="fundAmount" class="form-control" placeholder="Enter Amount" aria-describedby="helpId">
+                                                        </div>
+                                                        <button type="button" class="btn btn-primary" id="fundBtn">Save</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <!-- end fund account modal -->
+
+                                <!-- MODAL END -->
+
+
+
     </body>
 
     <script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
     <script type="text/javascript" src="js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="js/api.js"></script>
 
 </html>

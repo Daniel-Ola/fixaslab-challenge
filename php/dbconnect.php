@@ -19,4 +19,18 @@ function dbconnect()
 	}
 	return $connect ;
 }
+
+function bankdb()
+{
+	$connect = mysqli_connect("localhost" , "root" , "", "fixasbank") ;
+	if($connect)
+	{
+		return $connect ;
+	}
+	else
+	{
+		header("location:databaseerror.php") ;
+	}
+	return $connect ;
+}
 ?>
