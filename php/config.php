@@ -79,7 +79,8 @@ function showAlert($type , $message)
 
 function passwordHash($password)
 {
-  $salt = "Jesulayomi-Olaolorunnimonje" ;
+  $salt = "Jesus-Paid-It-All".$password ;
+  $password = $salt.$password.$salt ;
 	$pass = hash("sha256", md5($password)) ;
 	return $pass ;
 }

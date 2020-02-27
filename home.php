@@ -27,8 +27,8 @@ $userDet = $user->getUserDet($_SESSION['user_id']) ;
                         <a class="nav-link dropdown-toggle" href="#" id="dropdownId" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">FixasBank</a>
                         <div class="dropdown-menu" aria-labelledby="dropdownId">
                             <a class="dropdown-item" data-toggle="modal" data-target="#modelId" id="navAcctCreator" style="display: none;" href="#">Create Account</a>
-                            <a class="dropdown-item" id="fundAccout" data-toggle="modal" data-target="#fundAcctModal" href="#">Fund Account</a>
-                            <a class="dropdown-item" href="#">Withdraw from Account</a>
+                            <a class="dropdown-item" id="fundAccout" data-toggle="modal" data-target="#fundAcctModal" style="display: none;" href="#">Fund Account</a>
+                            <a class="dropdown-item" id="withdrawFund" data-toggle="modal" data-target="#withdrawFundModal" style="display: none;" href="#">Withdraw from Account</a>
                         </div>
                     </li>
                     <li class="nav-item">
@@ -48,15 +48,11 @@ $userDet = $user->getUserDet($_SESSION['user_id']) ;
                             <div class="card-body">
                                 <h4 class="card-title text-center">Welcome to your homepage at FixasLab</h4>
                                 <p class="card-text">Quick Links</p>
-                                <?php 
-                                    $detStr = implode('_-_' , $userDet) ;
-                                    $encodedDet = base64_encode($detStr) ;
-                                ?>
                             </div>
                             <ul class="list-group list-group-flush">
                                 <li class="list-group-item text-center" id="preload">Loading</li>
-                                <li class="list-group-item d-none" id="hasAccount">You do not have a FixasBank Account. Create one now. <span class="btn btn-info float-right" data-toggle="modal" data-target="#modelId">Create Account</span></li>
-                                <li class="list-group-item d-none" id="hasBalance"><span class="btn btn-info"> Wallet balance</span> <span class="badge badge-info float-right" id="balance">0.00</span></li>
+                                <li class="list-group-item d" style="display: none ;" id="hasAccount">You do not have a FixasBank Account. Create one now. <span class="btn btn-info float-right" data-toggle="modal" data-target="#modelId">Create Account</span></li>
+                                <li class="list-group-item" style="display: none ;" id="hasBalance"><span class="btn btn-info"> Wallet balance</span> <span class="badge badge-info float-right" id="balance">0.00</span></li>
                                 <!-- <li class="list-group-item d-none">Item 3</li> -->
                             </ul>
                         </div>
@@ -80,6 +76,7 @@ $userDet = $user->getUserDet($_SESSION['user_id']) ;
                                             <div class="modal-body">
                                                 <div class="alert alert-info text-center d-none" id="acctcreateReturn"></div>
                                                 <form method="get" action="">
+                                                    <input type="hidden" readonly value="0" id="ifCreated">
                                                     <div class="form-group">
                                                       <label for="">Email</label>
                                                       <input type="email" class="form-control" name="" id="userEmail" value="<?= $userDet['email'] ?>" aria-describedby="emailHelpId" placeholder="" readonly>
@@ -104,15 +101,43 @@ $userDet = $user->getUserDet($_SESSION['user_id']) ;
 
 
                                 <!-- fund account modal -->
-                                    <div id="fundAcctModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+                                <div id="fundAcctModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
                                         <div class="modal-dialog modal-dialog-centered" role="document">
                                             <div class="modal-content">
                                                 <div class="modal-body">
-                                                        <div class="form-group">
-                                                            <label for="">Enter Amount</label>
-                                                            <input type="number" name="fundAmount" id="fundAmount" class="form-control" placeholder="Enter Amount" aria-describedby="helpId">
-                                                        </div>
-                                                        <button type="button" class="btn btn-primary" id="fundBtn">Save</button>
+                                                    <div class="alert alert-info text-center" style="display: none;" id="acctFundReturn"></div>
+                                                    <div class="form-group">
+                                                        <label for="">Enter Amount</label>
+                                                        <input type="number" name="fundAmount" id="fundAmount" class="form-control" placeholder="Enter Amount" aria-describedby="helpId">
+                                                    </div>
+                                                    <button type="button" class="btn btn-primary" id="fundBtn">Save</button>
+                                                    <!-- <button type="button" class="btn btn-primary" id="okayFundBtn">Okay</button> -->
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <!-- end fund account modal -->
+
+                                <!-- withdraw account modal -->
+                                    <div id="withdrawFundModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-body">
+                                                    <div class="alert alert-info text-center" style="display: none;" id="acctWithdrawReturn"></div>
+                                                    <div class="form-group">
+                                                        <label for="">Amount Withdrawable</label>
+                                                        <input type="number" name="" id="availableBalance" class="form-control" placeholder="0.00" aria-describedby="helpId" readonly>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="">Amount Remaining</label>
+                                                        <input type="number" name="" id="remainBalance" class="form-control" placeholder="0.00" aria-describedby="helpId" readonly>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="">Enter Amount</label>
+                                                        <input type="number" name="withdrawAmt" id="withdrawAmt" class="form-control" placeholder="Enter Amount" aria-describedby="helpId">
+                                                    </div>
+                                                    <button type="button" class="btn btn-primary" id="withdrawBtn">Withdraw</button>
+                                                    <!-- <button type="button" class="btn btn-primary" id="okayFundBtn">Okay</button> -->
                                                 </div>
                                             </div>
                                         </div>

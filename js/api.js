@@ -9,13 +9,15 @@ let userMail = $("#userMail").val() ;
             acctExist = jsonData.account ;
             acctBal = jsonData.balance ;
             if(acctExist == 0){ // user has no account
-                $("#hasAccount").toggleClass('d-none' , 'd-block') ;
                 $("#hasAccount").show() ;
                 $("#navAcctCreator").show() ;
+                $("#fundAccout").hide() ;
+                $("#withdrawFund").hide() ;
             }else{ // user has account 
                 $("#hasAccount").hide() ;
                 $("#navAcctCreator").hide() ;
-                $("#hasBalance").toggleClass('d-none' , 'd-block') ;
+                $("#fundAccout").show() ;
+                $("#withdrawFund").show() ;
                 $("#hasBalance").show() ;
                 $("#balance").html(acctBal) ;
             }
@@ -39,6 +41,7 @@ let userMail = $("#userMail").val() ;
         $.get(url , {
 
         }).done(function(data){
+            $("#ifCreated").val(1) ;
             let acctCreateData = JSON.parse(data) ;
             let retVal = acctCreateData.accountCreate
             console.log(retVal);
@@ -71,9 +74,57 @@ let userMail = $("#userMail").val() ;
         $.get(url , {
 
         }).done(function(data){
-            console.log(data);
+            let jsonFundData = JSON.parse(data) ;
+            let doneFund = jsonFundData.fundaction ;
+            if(doneFund == 'true'){
+                $("#acctFundReturn").html('Your Account has been credited with '+amount) ;
+            }else{
+                $("#acctFundReturn").html('Sorry an error occured') ;
+            }
+            $("#acctFundReturn").show() ;
         }) ;
     }) ;
+
+    $("#withdrawBtn").click(function () {
+        let withdrawAmt = $("#withdrawAmt").val() ;
+        let url = "http://localhost/fix-a-challenge/fixasbank/api.php?guest="+userMail+"&action=2361&amount="+withdrawAmt ;
+        $.get(url , {
+
+        }).done(function(data){
+            let jsonWithdrawData = JSON.parse(data) ;
+            let doneWithdraw = jsonWithdrawData.withdrawAction ;
+            if(doneWithdraw == '1'){
+                $("#acctWithdrawReturn").html('Your Account has been debited with '+withdrawAmt) ;
+            }else if(doneWithdraw == '-1'){
+                $("#acctWithdrawReturn").html("Sorry you don't have that much in your account.") ;
+            }else{
+                $("#acctWithdrawReturn").html('Sorry an error occured') ;
+            }
+            $("#acctWithdrawReturn").show() ;
+        }) ;
+    }) ;
+
+
+    $("#modelId").on('hidden.bs.modal' , function(){
+        if($("#ifCreated").val() == 1){
+            window.location.reload() ;
+        }
+    }) ;
+    $("#fundAcctModal , #withdrawFundModal").on('hidden.bs.modal' , function(){
+        loadUserDetails() ;
+    }) ;
+
+    $("#withdrawAmt").on('keyup' , function(){
+        withdrawAmt = $(this).val() ;
+        newAmt = $("#availableBalance").val() - withdrawAmt ;
+        $("#remainBalance").val(newAmt) ;
+    }) ;
+
+    $("#withdrawFundModal").on('show.bs.modal' , function(){
+        $("#availableBalance").val($("#balance").html()) ;
+        $("#remainBalance").val($("#balance").html()) ;
+    }) ;
+    
     /********************************  End User Funds Account  **********************************/
 
 
